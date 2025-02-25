@@ -1,0 +1,43 @@
+##
+# repositories.yaml
+# A map of repositories and settings to create for the environment.
+##
+---
+repositories:
+  aws_12490_test1:
+    name: 'aws-12490-test1'
+    description: >-
+      The pipeline code required for creating test1
+    use_build_image: false
+    create_ami: false
+    create_ecr_repository: false
+    public_ecr_repository: false
+    create_report_group: false
+    enable_ecr: false
+    enable_s3: false
+
+  aws_12490_test2:
+    name: 'aws-12490-test2'
+    description: 'The pipeline code required for creating test2'
+    use_build_image: false
+    create_ami: false
+    create_ecr_repository: false
+    public_ecr_repository: false
+    create_report_group: false
+    enable_ecr: false
+    enable_s3: false
+
+  aws_12490_test3:
+    name: 'aws-12490-test3'
+    description: 'The pipeline code required for creating test3'
+    use_build_image: false
+    create_ami: false
+    create_ecr_repository: false
+    public_ecr_repository: false
+    create_report_group: false
+    enable_ecr: false
+    enable_s3: false
+
+  aws_12490_test4:
+    name: 'aws-12490-test4'
+    description: 'Test'
