@@ -18,8 +18,17 @@ pip install -r requirements.txt
 ## Usage
 To use the GitHub Manager, you can run the main script in the `src` directory. Make sure to configure your label settings in the `config\labeler.yaml` file.
 
+```
+python src/cli.py create --repo my-repo --description "My new repository"
+python src/cli.py delete --repo my-repo
+python src/cli.py issues --repo my-repo
+python src/cli.py labels --repo my-repo
+python src/cli.py pulls --repo my-repo
+python src/cli.py config --config path/to/config.yaml
+python src/cli.py decom --config path/to/config.yaml
+```
+
 ## Contribution
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+
