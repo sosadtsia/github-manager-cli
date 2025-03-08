@@ -50,8 +50,7 @@ def create_repository(repo_name, description):
             has_wiki=True,
             has_projects=False,
             name=repo_name,
-            private=True,
-            visibility="internal"
+            private=True
         )
     else:
         print(f"Update private GitHub repository `{repo_name}`")
@@ -67,8 +66,7 @@ def create_repository(repo_name, description):
             has_wiki=False,
             has_projects=False,
             name=repo_name,
-            private=True,
-            visibility="internal"
+            private=True
         )
 
 def get_pull_requests(repo_name):
