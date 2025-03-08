@@ -1,3 +1,6 @@
-PyGithub==2.6.1
-PyYAML==6.0.2
-yamllint==1.35.1
+PyGithub
+PyYAML
+yamllint
+python-dotenv
+pycowsay
+

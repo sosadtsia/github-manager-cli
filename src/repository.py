@@ -1,14 +1,18 @@
 import os
 import yaml
+from dotenv import load_dotenv
 from github import Github, GithubException, Auth
 
+# Load environment variables from .env file
+load_dotenv()
+
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
-ORGANIZATION = os.environ.get("GITHUB_ORG")
+GITHUB_ORG = os.environ.get("GITHUB_ORG")
 
 # Get access to the organization using GITHUB_TOKEN.
 auth = Auth.Token(f"{GITHUB_TOKEN}")
 g = Github(auth=auth)
-org = g.get_organization(f"{ORGANIZATION}")
+org = g.get_organization(f"{GITHUB_ORG}")
 
 def get_repo(repo_name):
     """
