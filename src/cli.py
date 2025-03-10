@@ -1,4 +1,7 @@
+# cli.py - The CLI implementation for the GitHub Repository Manager.
+
 import argparse
+import os
 from rich.text import Text
 from repository import (
     create_repository,
@@ -15,9 +18,13 @@ from display import (
     display_empty
 )
 
-from notifications import create_notification
+from notifications.slack import send_slack_notification
+from notifications.discord import send_discord_notification
 
-def main():
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+
+def run_cli():
     parser = argparse.ArgumentParser(description="GitHub Repository Manager CLI")
     parser.add_argument("action", choices=[
         "create",
@@ -46,10 +53,16 @@ def main():
 
     args = parser.parse_args()
 
+    def send_notification(action, details, status="success"):
+        if SLACK_WEBHOOK_URL:
+            send_slack_notification(action, details, status)
+        if DISCORD_WEBHOOK_URL:
+            send_discord_notification(action, details, status)
+
     try:
         if args.action == "create" and args.repo and args.description:
             create_repository(args.repo, args.description)
-            create_notification(
+            send_notification(
                 "Repository Created",
                 {
                     "Repository": args.repo,
@@ -67,7 +80,7 @@ def main():
 
         elif args.action == "delete" and args.repo:
             delete_repository(args.repo)
-            create_notification(
+            send_notification(
                 "Repository Deleted",
                 {
                     "Repository": args.repo
@@ -83,13 +96,13 @@ def main():
             )
 
         elif args.action == "issues" and args.repo:
-            issues = get_issues(
+            issues = get_open_issues(
                 args.repo,
                 state=args.state,
                 labels=args.labels,
                 assignee=args.assignee
             )
-            create_notification(
+            send_notification(
                 "Issues Retrieved",
                 {
                     "Repository": args.repo,
@@ -121,7 +134,7 @@ def main():
 
         elif args.action == "labels" and args.repo:
             labels = get_labels(args.repo)
-            create_notification(
+            send_notification(
                 "Labels Retrieved",
                 {
                     "Repository": args.repo,
@@ -141,7 +154,7 @@ def main():
 
         elif args.action == "pulls" and args.repo:
             pulls = get_pull_requests(args.repo)
-            create_notification(
+            send_notification(
                 "Pull Requests Retrieved",
                 {
                     "Repository": args.repo,
@@ -161,7 +174,7 @@ def main():
 
         elif args.action == "config" and args.config:
             repo_config(args.config)
-            create_notification(
+            send_notification(
                 "Configuration Applied",
                 {
                     "Config File": args.config
@@ -178,7 +191,7 @@ def main():
 
         elif args.action == "decom" and args.config:
             repo_decom(args.config)
-            create_notification(
+            send_notification(
                 "Repository Decommissioned",
                 {
                     "Config File": args.config
@@ -197,7 +210,7 @@ def main():
             # Convert comma-separated labels to list
             labels = [label.strip() for label in args.labels.split(",")] if args.labels else []
             issue = create_issue(args.repo, args.title, args.body, labels)
-            create_notification(
+            send_notification(
                 "Issue Created",
                 {
                     "Repository": args.repo,
@@ -222,7 +235,7 @@ def main():
 
     except Exception as e:
         error_message = str(e)
-        create_notification(
+        send_notification(
             "Error Occurred",
             {
                 "Action": args.action,
@@ -237,6 +250,3 @@ def main():
             ),
             "error"
         )
-
-if __name__ == "__main__":
-    main()

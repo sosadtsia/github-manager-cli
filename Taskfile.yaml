@@ -6,6 +6,7 @@ vars:
   PYTEST_FLAGS: -v --cache-clear
   COVERAGE_FLAGS: --cov=src --cov-report=term-missing --cov-report=html
   LINT_FLAGS: --rcfile=.pylintrc
+  VENV_DIR: venv
 
 tasks:
   install:
@@ -123,3 +124,28 @@ tasks:
       - task: install
       - task: lint
       - task: test
+
+  # This task is used to create a virtual environment for Fish shell.
+  # istall virtualfish first @https://github.com/justinmayer/virtualfish
+  # to use virtualfish see @https://virtualfish.readthedocs.io/en/latest/usage.html
+  create-venv:
+    desc: Create a virtual environment
+    cmds:
+      - vf new {{.VENV_DIR}}
+
+  activate-venv:
+    desc: Activate the virtual environment (for Fish shell)
+    cmds:
+      - vf activate {{.VENV_DIR}}
+    silent: true
+
+  deactivate-venv:
+    desc: Deactivate the virtual environment (for Fish shell)
+    cmds:
+      - vf deactivate
+    silent: true
+
+  remove-venv:
+    desc: Remove the virtual environment
+    cmds:
+      - vf remove {{.VENV_DIR}}

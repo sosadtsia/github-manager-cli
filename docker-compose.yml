@@ -6,6 +6,7 @@ services:
     environment:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - GITHUB_ORG=${GITHUB_ORG}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
     volumes:
       - ./.env:/app/.env:ro
       - ./config:/app/config:ro

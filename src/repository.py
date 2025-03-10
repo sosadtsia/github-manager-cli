@@ -39,7 +39,7 @@ def create_repository(repo_name, description):
     if repo is None:
         print(f"Creating private GitHub repository `{repo_name}`")
         org.create_repo(
-            allow_auto_merge=False,
+            # allow_auto_merge=True,
             allow_merge_commit=True,
             allow_rebase_merge=False,
             allow_squash_merge=False,
@@ -55,7 +55,7 @@ def create_repository(repo_name, description):
     else:
         print(f"Update private GitHub repository `{repo_name}`")
         repo.edit(
-            allow_auto_merge=False,
+            # allow_auto_merge=False,
             allow_merge_commit=True,
             allow_rebase_merge=False,
             allow_squash_merge=False,

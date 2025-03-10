@@ -1,3 +1,5 @@
+# discord.py - Sends notifications to Discord channels
+
 import os
 from datetime import datetime
 import requests
@@ -11,7 +13,7 @@ class DiscordNotifier:
         if not self.webhook_url:
             console.print("[bold red]Warning: DISCORD_WEBHOOK_URL not set. Notifications will be disabled.[/bold red]")
 
-    def send_notification(self, title, description, color=0x00ff00, fields=None):
+    def send_discord_notification(self, title, description, color=0x00ff00, fields=None):
         """
         Send notification to Discord channel
         color: Discord color code (default: green)
@@ -41,7 +43,7 @@ class DiscordNotifier:
         except requests.exceptions.RequestException as e:
             console.print(f"[bold red]Failed to send Discord notification: {str(e)}[/bold red]")
 
-def create_notification(action, details, status="success"):
+def send_discord_notification(action, details, status="success"):
     """Helper function to create and send notifications"""
     notifier = DiscordNotifier()
 
@@ -61,7 +63,7 @@ def create_notification(action, details, status="success"):
             for key, value in details.items()
         ]
 
-    notifier.send_notification(
+    notifier.send_discord_notification(
         title=f"GitHub Manager: {action}",
         description=str(details) if not isinstance(details, dict) else None,
         color=colors.get(status, 0x00ff00),
