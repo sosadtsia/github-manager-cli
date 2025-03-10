@@ -1,14 +1,18 @@
 import os
 import yaml
+from dotenv import load_dotenv
 from github import Github, GithubException, Auth
 
+# Load environment variables from .env file
+load_dotenv()
+
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
-ORGANIZATION = os.environ.get("GITHUB_ORG")
+GITHUB_ORG = os.environ.get("GITHUB_ORG")
 
 # Get access to the organization using GITHUB_TOKEN.
 auth = Auth.Token(f"{GITHUB_TOKEN}")
 g = Github(auth=auth)
-org = g.get_organization(f"{ORGANIZATION}")
+org = g.get_organization(f"{GITHUB_ORG}")
 
 def get_repo(repo_name):
     """
@@ -35,7 +39,7 @@ def create_repository(repo_name, description):
     if repo is None:
         print(f"Creating private GitHub repository `{repo_name}`")
         org.create_repo(
-            allow_auto_merge=False,
+            # allow_auto_merge=True,
             allow_merge_commit=True,
             allow_rebase_merge=False,
             allow_squash_merge=False,
@@ -46,13 +50,12 @@ def create_repository(repo_name, description):
             has_wiki=True,
             has_projects=False,
             name=repo_name,
-            private=True,
-            visibility="internal"
+            private=True
         )
     else:
         print(f"Update private GitHub repository `{repo_name}`")
         repo.edit(
-            allow_auto_merge=False,
+            # allow_auto_merge=False,
             allow_merge_commit=True,
             allow_rebase_merge=False,
             allow_squash_merge=False,
@@ -63,8 +66,7 @@ def create_repository(repo_name, description):
             has_wiki=False,
             has_projects=False,
             name=repo_name,
-            private=True,
-            visibility="internal"
+            private=True
         )
 
 def get_pull_requests(repo_name):

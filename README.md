@@ -28,7 +28,22 @@ python src/cli.py config --config path/to/config.yaml
 python src/cli.py decom --config path/to/config.yaml
 ```
 
-## Contribution
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
+## Sponsors
 
+Please [contact me](https://github.com/sosadtsia) if you want to become a sponsor.
 
+## Contributions
+
+I always want to get feedback and update this project as the community matures and new ideas are implemented and verified over time.
+
+If you are interested in specific topics, please [open an issue](https://github.com/sosadtsia/github-manager.git/issues), or thumb up an issue you want to be covered. If you want to contribute, please submit a pull request.
+
+## License
+
+This project is licensed with [apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+## Code of Conduct
+
+We are committed to fostering a welcoming and inclusive environment. Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our expectations for respectful participation.
+
+By contributing to this project, you agree to abide by its terms.
