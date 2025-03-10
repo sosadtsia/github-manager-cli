@@ -7,25 +7,43 @@ GitHub Manager is a Python application designed to help users manage their GitHu
 - Manage labels for GitHub repositories
 - Core functionalities for managing repositories, issues, and pull requests
 - Utility functions for common tasks
+- Notifications via Slack and Discord
 
 ## Installation
 To install the required dependencies, run the following command:
 
-```
+```sh
 pip install -r requirements.txt
 ```
 
-## Usage
-To use the GitHub Manager, you can run the main script in the `src` directory. Make sure to configure your label settings in the `config\labeler.yaml` file.
+To install the `gm` CLI tool, run the following command:
 
+```sh
+pip install -e .
 ```
-python src/cli.py create --repo my-repo --description "My new repository"
-python src/cli.py delete --repo my-repo
-python src/cli.py issues --repo my-repo
-python src/cli.py labels --repo my-repo
-python src/cli.py pulls --repo my-repo
-python src/cli.py config --config path/to/config.yaml
-python src/cli.py decom --config path/to/config.yaml
+
+## Configuration
+Create a `.env` file in the root directory of the project and add the following environment variables:
+
+```env
+GITHUB_TOKEN=your_github_token
+GITHUB_ORG=your_github_org
+DISCORD_WEBHOOK_URL=your_discord_webhook
+SLACK_WEBHOOK_URL=your_slack_webhook
+```
+
+## Usage
+To use the GitHub Manager, you can run the `gm` command. Make sure to configure your label settings in the `config/labeler.yaml` file.
+
+```sh
+gm create --repo my-repo --description "My new repository"
+gm delete --repo my-repo
+gm issues --repo my-repo
+gm labels --repo my-repo
+gm pulls --repo my-repo
+gm config --config path/to/config.yaml
+gm decom --config path/to/config.yaml
+gm new-issue --repo my-repo --title "Issue title" --body "Issue body" --labels "bug,enhancement"
 ```
 
 ## Sponsors
