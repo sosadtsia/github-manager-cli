@@ -76,15 +76,16 @@ def create_repository(repo_name, description=None):
     Creates a single GitHub repository.
     """
     repo = get_repo(repo_name)
+    repo_config = {
+        "name": repo_name,
+        "description": description,
+        "private": True
+    }
     if repo is None:
-        repo_config = {
-            "name": repo_name,
-            "description": description,
-            "private": True
-        }
         try:
             print(f"Creating private GitHub repository `{repo_name}`")
             org.create_repo(**repo_config)
+            return "created"
         except GithubException as e:
             if e.status == 422:
                 print(f"Repository `{repo_name}` already exists.")
@@ -92,7 +93,17 @@ def create_repository(repo_name, description=None):
                 print(f"Error creating repository `{repo_name}`: {str(e)}")
                 raise e
     else:
-        print(f"Repository `{repo_name}` already exists. Skipping creation.")
+        print(f"Repository `{repo_name}` already exists. Updating repository.")
+        # Remove unsupported arguments for the edit method
+        unsupported_args = ["auto_init", "gitignore_template", "license_template"]
+        for arg in unsupported_args:
+            repo_config.pop(arg, None)
+        try:
+            repo.edit(**repo_config)
+            return "updated"
+        except GithubException as e:
+            print(f"Error updating repository `{repo_name}`: {str(e)}")
+            raise e
 
 def delete_repository(repo_name):
     """
@@ -102,6 +113,10 @@ def delete_repository(repo_name):
     if repo:
         print(f"Deleting GitHub repository `{repo_name}`")
         repo.delete()
+        return True
+    else:
+        print(f"Repository `{repo_name}` does not exist. Skipping deletion.")
+        return False
 
 def decommission_repository(repositories_decom_list):
     """

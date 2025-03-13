@@ -5,8 +5,6 @@ from rich.text import Text
 from dotenv import load_dotenv
 from github import Github, GithubException, Auth
 from repository import (
-    configure_repository,
-    decommission_repository,
     create_repository,
     delete_repository
 )
@@ -22,14 +20,6 @@ from notifications.discord import send_discord_notification
 
 # Load environment variables from .env file
 load_dotenv()
-
-GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
-GITHUB_ORG = os.environ.get("GITHUB_ORG")
-
-# Get access to the organization using GITHUB_TOKEN.
-auth = Auth.Token(f"{GITHUB_TOKEN}")
-g = Github(auth=auth)
-org = g.get_organization(f"{GITHUB_ORG}")
 
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
@@ -62,42 +52,114 @@ def run_cli():
 
     try:
         # Handle repository creation based on YAML config
-        for repo_name, repo_config in repos.items():
-            if args.action == "create":
-                create_repository(repo_name, description=repo_config.get('description'))
-                send_notification(
-                    "Repository Created",
-                    {
-                        "Repository": repo_name,
-                        "Description": repo_config.get('description')
-                    },
-                    "success"
-                )
-                display_result(
-                    Text.assemble(
-                        "GitHub repository created: ",
-                        (repo_name, "bold green")
-                    ),
-                    "success"
-                )
+        if args.action == "create":
+            if isinstance(repos, dict):
+                for repo_name, repo_config in repos.items():
+                    result = create_repository(repo_name, description=repo_config.get('description'))
+                    if result == "created":
+                        send_notification(
+                            "Repository Created",
+                            {
+                                "Repository": repo_name,
+                                "Description": repo_config.get('description')
+                            },
+                            "success"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository created: ",
+                                (repo_name, "bold green")
+                            ),
+                            "success"
+                        )
+                    elif result == "updated":
+                        send_notification(
+                            "Repository Updated",
+                            {
+                                "Repository": repo_name,
+                                "Description": repo_config.get('description')
+                            },
+                            "success"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository updated: ",
+                                (repo_name, "bold blue")
+                            ),
+                            "success"
+                        )
+            elif isinstance(repos, list):
+                for repo_name in repos:
+                    result = create_repository(repo_name, description=description)
+                    if result == "created":
+                        send_notification(
+                            "Repository Created",
+                            {
+                                "Repository": repo_name,
+                                "Description": description
+                            },
+                            "success"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository created: ",
+                                (repo_name, "bold green")
+                            ),
+                            "success"
+                        )
+                    elif result == "updated":
+                        send_notification(
+                            "Repository Updated",
+                            {
+                                "Repository": repo_name,
+                                "Description": description
+                            },
+                            "success"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository updated: ",
+                                (repo_name, "bold blue")
+                            ),
+                            "success"
+                        )
 
-            # Handle repository deletion based on YAML config
-            elif args.action == "delete":
-                delete_repository(repo_name)
-                send_notification(
-                    "Repository Deleted",
-                    {
-                        "Repository": repo_name
-                    },
-                    "warning"
-                )
-                display_result(
-                    Text.assemble(
-                        "GitHub repository deleted: ",
-                        (repo_name, "bold red")
-                    ),
-                    "warning"
-                )
+        # Handle repository deletion based on YAML config
+        elif args.action == "delete":
+            if isinstance(repos, dict):
+                for repo_name in repos.keys():
+                    if delete_repository(repo_name):
+                        send_notification(
+                            "Repository Deleted",
+                            {
+                                "Repository": repo_name
+                            },
+                            "warning"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository deleted: ",
+                                (repo_name, "bold red")
+                            ),
+                            "warning"
+                        )
+            elif isinstance(repos, list):
+                for repo_name in repos:
+                    if delete_repository(repo_name):
+                        send_notification(
+                            "Repository Deleted",
+                            {
+                                "Repository": repo_name
+                            },
+                            "warning"
+                        )
+                        display_result(
+                            Text.assemble(
+                                "GitHub repository deleted: ",
+                                (repo_name, "bold red")
+                            ),
+                            "warning"
+                        )
 
     except Exception as e:
         error_message = str(e)

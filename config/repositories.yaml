@@ -20,3 +20,34 @@ repositories:
     allow_rebase_merge: false
     delete_branch_on_merge: true
 
+  repo1:
+    description: "This is an example repository"
+    homepage: "https://example.com"
+    private: false
+    has_issues: true
+    has_projects: false
+    has_wiki: true
+    # team_id: 123456
+    auto_init: true
+    gitignore_template: "Python"
+    license_template: "mit"
+    allow_squash_merge: true
+    allow_merge_commit: true
+    allow_rebase_merge: false
+    delete_branch_on_merge: true
+
+  repo2:
+    description: "This is an example repository"
+    homepage: "https://example.com"
+    private: false
+    has_issues: true
+    has_projects: false
+    has_wiki: true
+    # team_id: 123456
+    auto_init: true
+    gitignore_template: "Python"
+    license_template: "mit"
+    allow_squash_merge: true
+    allow_merge_commit: true
+    allow_rebase_merge: false
+    delete_branch_on_merge: true
