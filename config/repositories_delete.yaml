@@ -1,10 +1,10 @@
 ##
 # repositories_delete.yaml
-# A list of the repositories to delete if present.
+# A map of the repositories to delete if present.
 ##
 ---
 repositories: {
   repo1,
   repo2,
-  example-repo,
+  repo3,
 }
