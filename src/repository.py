@@ -71,16 +71,21 @@ def configure_repository(config_file):
                 repo_config.pop(arg, None)
             repo.edit(**repo_config)
 
-def create_repository(repo_name, description=None):
+def create_repository(repo_name, description=None, repo_config=None):
     """
     Creates a single GitHub repository.
     """
     repo = get_repo(repo_name)
-    repo_config = {
-        "name": repo_name
-        # "description": description,
-        # "private": True
+    default_config = {
+        "name": repo_name,
+        "description": description,
+        "private": True
     }
+    if repo_config is None:
+        repo_config = default_config
+    else:
+        repo_config = {**default_config, **repo_config}
+
     if repo is None:
         try:
             print(f"Creating GitHub repository `{repo_name}`")
