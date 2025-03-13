@@ -55,7 +55,7 @@ def configure_repository(config_file):
 
         if repo is None:
             try:
-                print(f"Creating private GitHub repository `{repo_name}`")
+                print(f"Creating GitHub repository `{repo_name}`")
                 org.create_repo(**repo_config)
             except GithubException as e:
                 if e.status == 422:
@@ -64,26 +64,31 @@ def configure_repository(config_file):
                     print(f"Error creating repository `{repo_name}`: {str(e)}")
                     raise e
         else:
-            print(f"Update private GitHub repository `{repo_name}`")
+            print(f"Update GitHub repository `{repo_name}`")
             # Remove unsupported arguments for the edit method
             unsupported_args = ["auto_init", "gitignore_template", "license_template"]
             for arg in unsupported_args:
                 repo_config.pop(arg, None)
             repo.edit(**repo_config)
 
-def create_repository(repo_name, description=None):
+def create_repository(repo_name, description=None, repo_config=None):
     """
     Creates a single GitHub repository.
     """
     repo = get_repo(repo_name)
-    repo_config = {
+    default_config = {
         "name": repo_name,
         "description": description,
         "private": True
     }
+    if repo_config is None:
+        repo_config = default_config
+    else:
+        repo_config = {**default_config, **repo_config}
+
     if repo is None:
         try:
-            print(f"Creating private GitHub repository `{repo_name}`")
+            print(f"Creating GitHub repository `{repo_name}`")
             org.create_repo(**repo_config)
             return "created"
         except GithubException as e:

@@ -55,7 +55,7 @@ def run_cli():
         if args.action == "create":
             if isinstance(repos, dict):
                 for repo_name, repo_config in repos.items():
-                    result = create_repository(repo_name, description=repo_config.get('description'))
+                    result = create_repository(repo_name, description=repo_config.get('description'), repo_config=repo_config)
                     if result == "created":
                         send_notification(
                             "Repository Created",
