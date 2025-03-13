@@ -31,56 +31,79 @@ def get_repo(repo_name):
             print(f"Error fetching repository from GitHub {org} - {str(e)}")
             raise e
 
-def create_repository(repo_name, description):
+def load_repo_configs(config_file):
     """
-    Creates GitHub repository.
+    Loads repository configurations from a YAML file.
     """
-    repo = get_repo(repo_name)
-    if repo is None:
-        print(f"Creating private GitHub repository `{repo_name}`")
-        org.create_repo(
-            # allow_auto_merge=True,
-            allow_merge_commit=True,
-            allow_rebase_merge=False,
-            allow_squash_merge=False,
-            allow_update_branch=False,
-            delete_branch_on_merge=True,
-            description=description,
-            has_issues=True,
-            has_wiki=True,
-            has_projects=False,
-            name=repo_name,
-            private=True
-        )
-    else:
-        print(f"Update private GitHub repository `{repo_name}`")
-        repo.edit(
-            # allow_auto_merge=False,
-            allow_merge_commit=True,
-            allow_rebase_merge=False,
-            allow_squash_merge=False,
-            allow_update_branch=False,
-            delete_branch_on_merge=True,
-            description=description,
-            has_issues=True,
-            has_wiki=False,
-            has_projects=False,
-            name=repo_name,
-            private=True
-        )
+    with open(config_file, 'r') as f:
+        try:
+            repos = yaml.load(f, Loader=yaml.FullLoader)
+            return repos.get("repositories", {})
+        except yaml.YAMLError as e:
+            print("Invalid YAML", e)
+            return {}
 
-def get_pull_requests(repo_name):
+def configure_repository(config_file):
     """
-    Get open pull requests for GitHub repository.
+    Creates GitHub repositories based on YAML configuration.
     """
-    pr_list = []
+    repo_configs = load_repo_configs(config_file)
+
+    for repo_name, repo_config in repo_configs.items():
+        repo = get_repo(repo_name)
+        repo_config["name"] = repo_name
+
+        if repo is None:
+            try:
+                print(f"Creating private GitHub repository `{repo_name}`")
+                org.create_repo(**repo_config)
+            except GithubException as e:
+                if e.status == 422:
+                    print(f"Repository `{repo_name}` already exists.")
+                else:
+                    print(f"Error creating repository `{repo_name}`: {str(e)}")
+                    raise e
+        else:
+            print(f"Update private GitHub repository `{repo_name}`")
+            # Remove unsupported arguments for the edit method
+            unsupported_args = ["auto_init", "gitignore_template", "license_template"]
+            for arg in unsupported_args:
+                repo_config.pop(arg, None)
+            repo.edit(**repo_config)
+
+def create_repository(repo_name, description=None):
+    """
+    Creates a single GitHub repository.
+    """
     repo = get_repo(repo_name)
-    if repo:
-        prs = repo.get_pulls(state='open', sort='created', base='master')
-        print(f"List of open PRs for GitHub repository `{repo_name}`")
-        for pr in prs:
-            pr_list.append(pr.number)
-    return pr_list
+    repo_config = {
+        "name": repo_name,
+        "description": description,
+        "private": True
+    }
+    if repo is None:
+        try:
+            print(f"Creating private GitHub repository `{repo_name}`")
+            org.create_repo(**repo_config)
+            return "created"
+        except GithubException as e:
+            if e.status == 422:
+                print(f"Repository `{repo_name}` already exists.")
+            else:
+                print(f"Error creating repository `{repo_name}`: {str(e)}")
+                raise e
+    else:
+        print(f"Repository `{repo_name}` already exists. Updating repository.")
+        # Remove unsupported arguments for the edit method
+        unsupported_args = ["auto_init", "gitignore_template", "license_template"]
+        for arg in unsupported_args:
+            repo_config.pop(arg, None)
+        try:
+            repo.edit(**repo_config)
+            return "updated"
+        except GithubException as e:
+            print(f"Error updating repository `{repo_name}`: {str(e)}")
+            raise e
 
 def delete_repository(repo_name):
     """
@@ -90,57 +113,22 @@ def delete_repository(repo_name):
     if repo:
         print(f"Deleting GitHub repository `{repo_name}`")
         repo.delete()
+        return True
+    else:
+        print(f"Repository `{repo_name}` does not exist. Skipping deletion.")
+        return False
 
-def get_open_issues(repo_name):
+def decommission_repository(repositories_decom_list):
     """
-    Get all issues for a GitHub repository.
+    To delete repositories based on a list in YAML config.
     """
-    repo = get_repo(repo_name)
-    if repo:
-        print(f"List of open issues for repository `{repo_name}`")
-        open_issues = repo.get_issues(state='open')
-        for issue in open_issues:
-            print(issue)
-
-def get_labels(repo_name):
-    """
-    Get all labels for a GitHub repository.
-    """
-    repo = get_repo(repo_name)
-    if repo:
-        print(f"Labels for repository `{repo_name}`")
-        labels = repo.get_labels()
-        for label in labels:
-            print(label)
-
-def repo_config(repo_config):
-    """
-    Used to create repositories based on YAML config.
-    """
-    with open(f"{repo_config}", 'r') as f:
+    with open(f"{repositories_decom_list}", 'r') as f:
         try:
             repos = yaml.load(f, Loader=yaml.FullLoader)
         except yaml.YAMLError as e:
             print("Invalid YAML", e)
             return
 
-    config = list(repos["repositories"].values())
-    for repo in config:
-        create_repository(repo["name"], repo["description"])
-
-def repo_decom(repo_config):
-    """
-    NOTE: This is used for DEMO purposes only.
-    To delete repositories based on YAML config.
-    For the real repositories this needs to be adjusted.
-    """
-    with open(f"{repo_config}", 'r') as f:
-        try:
-            repos = yaml.load(f, Loader=yaml.FullLoader)
-        except yaml.YAMLError as e:
-            print("Invalid YAML", e)
-            return
-
-    config = list(repos["repositories"].values())
-    for repo in config:
-        delete_repository(repo["name"])
+    repo_names = repos.get("repositories", [])
+    for repo_name in repo_names:
+        delete_repository(repo_name)
