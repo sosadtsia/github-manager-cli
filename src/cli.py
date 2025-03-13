@@ -4,7 +4,9 @@ import yaml
 from rich.text import Text
 from repository import (
     configure_repository,
-    decommission_repository
+    decommission_repository,
+    create_repository,
+    delete_repository
 )
 
 from display import (
@@ -36,7 +38,7 @@ def run_cli():
     args = parser.parse_args()
 
     config = load_config(args.config)
-    repo = config.get('repo')
+    repos = config.get('repos', [])
     description = config.get('description')
 
     def send_notification(action, details, status="success"):
@@ -81,41 +83,42 @@ def run_cli():
             )
 
         # Handle repository creation based on YAML config
-        if repo and description:
-            create_repository(repo, description=description)
-            send_notification(
-                "Repository Created",
-                {
-                    "Repository": repo,
-                    "Description": description
-                },
-                "success"
-            )
-            display_result(
-                Text.assemble(
-                    "Repository created: ",
-                    (repo, "bold green")
-                ),
-                "success"
-            )
+        for repo in repos:
+            if args.action == "create":
+                create_repository(repo, description=description)
+                send_notification(
+                    "Repository Created",
+                    {
+                        "Repository": repo,
+                        "Description": description
+                    },
+                    "success"
+                )
+                display_result(
+                    Text.assemble(
+                        "Repository created: ",
+                        (repo, "bold green")
+                    ),
+                    "success"
+                )
 
-        # Handle repository deletion based on YAML config
-        if repo:
-            delete_repository(repo)
-            send_notification(
-                "Repository Deleted",
-                {
-                    "Repository": repo
-                },
-                "warning"
-            )
-            display_result(
-                Text.assemble(
-                    "Repository deleted: ",
-                    (repo, "bold red")
-                ),
-                "warning"
-            )
+            # Handle repository deletion based on YAML config
+            elif args.action == "delete":
+                delete_repository(repo)
+                send_notification(
+                    "Repository Deleted",
+                    {
+                        "Repository": repo
+                    },
+                    "warning"
+                )
+                display_result(
+                    Text.assemble(
+                        "Repository deleted: ",
+                        (repo, "bold red")
+                    ),
+                    "warning"
+                )
 
     except Exception as e:
         error_message = str(e)

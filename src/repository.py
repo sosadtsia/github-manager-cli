@@ -65,7 +65,34 @@ def configure_repository(config_file):
                     raise e
         else:
             print(f"Update private GitHub repository `{repo_name}`")
+            # Remove unsupported arguments for the edit method
+            unsupported_args = ["auto_init", "gitignore_template", "license_template"]
+            for arg in unsupported_args:
+                repo_config.pop(arg, None)
             repo.edit(**repo_config)
+
+def create_repository(repo_name, description=None):
+    """
+    Creates a single GitHub repository.
+    """
+    repo = get_repo(repo_name)
+    if repo is None:
+        repo_config = {
+            "name": repo_name,
+            "description": description,
+            "private": True
+        }
+        try:
+            print(f"Creating private GitHub repository `{repo_name}`")
+            org.create_repo(**repo_config)
+        except GithubException as e:
+            if e.status == 422:
+                print(f"Repository `{repo_name}` already exists.")
+            else:
+                print(f"Error creating repository `{repo_name}`: {str(e)}")
+                raise e
+    else:
+        print(f"Repository `{repo_name}` already exists. Skipping creation.")
 
 def delete_repository(repo_name):
     """
