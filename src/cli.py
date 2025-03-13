@@ -2,6 +2,8 @@ import argparse
 import os
 import yaml
 from rich.text import Text
+from dotenv import load_dotenv
+from github import Github, GithubException, Auth
 from repository import (
     configure_repository,
     decommission_repository,
@@ -17,6 +19,17 @@ from display import (
 
 from notifications.slack import send_slack_notification
 from notifications.discord import send_discord_notification
+
+# Load environment variables from .env file
+load_dotenv()
+
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
+GITHUB_ORG = os.environ.get("GITHUB_ORG")
+
+# Get access to the organization using GITHUB_TOKEN.
+auth = Auth.Token(f"{GITHUB_TOKEN}")
+g = Github(auth=auth)
+org = g.get_organization(f"{GITHUB_ORG}")
 
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
@@ -38,7 +51,7 @@ def run_cli():
     args = parser.parse_args()
 
     config = load_config(args.config)
-    repos = config.get('repos', [])
+    repos = config.get('repositories', {})
     description = config.get('description')
 
     def send_notification(action, details, status="success"):
@@ -48,74 +61,40 @@ def run_cli():
             send_discord_notification(action, details, status)
 
     try:
-        if args.action == "create" and args.config:
-            configure_repository(args.config)
-            send_notification(
-                "Configuration Applied",
-                {
-                    "Config File": args.config
-                },
-                "success"
-            )
-            display_result(
-                Text.assemble(
-                    "Configuration applied from: ",
-                    (args.config, "bold green")
-                ),
-                "success"
-            )
-
-        elif args.action == "delete" and args.config:
-            decommission_repository(args.config)
-            send_notification(
-                "Repository Decommissioned",
-                {
-                    "Config File": args.config
-                },
-                "warning"
-            )
-            display_result(
-                Text.assemble(
-                    "Decommissioning completed from: ",
-                    (args.config, "bold yellow")
-                ),
-                "warning"
-            )
-
         # Handle repository creation based on YAML config
-        for repo in repos:
+        for repo_name, repo_config in repos.items():
             if args.action == "create":
-                create_repository(repo, description=description)
+                create_repository(repo_name, description=repo_config.get('description'))
                 send_notification(
                     "Repository Created",
                     {
-                        "Repository": repo,
-                        "Description": description
+                        "Repository": repo_name,
+                        "Description": repo_config.get('description')
                     },
                     "success"
                 )
                 display_result(
                     Text.assemble(
-                        "Repository created: ",
-                        (repo, "bold green")
+                        "GitHub repository created: ",
+                        (repo_name, "bold green")
                     ),
                     "success"
                 )
 
             # Handle repository deletion based on YAML config
             elif args.action == "delete":
-                delete_repository(repo)
+                delete_repository(repo_name)
                 send_notification(
                     "Repository Deleted",
                     {
-                        "Repository": repo
+                        "Repository": repo_name
                     },
                     "warning"
                 )
                 display_result(
                     Text.assemble(
-                        "Repository deleted: ",
-                        (repo, "bold red")
+                        "GitHub repository deleted: ",
+                        (repo_name, "bold red")
                     ),
                     "warning"
                 )
@@ -137,3 +116,6 @@ def run_cli():
             ),
             "error"
         )
+
+if __name__ == "__main__":
+    run_cli()

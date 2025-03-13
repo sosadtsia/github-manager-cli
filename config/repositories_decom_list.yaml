@@ -3,7 +3,8 @@
 # A list of the repositories to delete if present.
 ##
 ---
-repositories:
-  - repo1
-  - repo2
-  - example-repo
+repositories: {
+  repo1,
+  repo2,
+  example-repo,
+}
