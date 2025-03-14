@@ -1,12 +1,13 @@
-# Dockerfile.dev - Development
+# Description: Dockerfile for the GitHub Manager application.
 
+# Base image
 FROM python:3.13-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy requirements first to leverage Docker cache
-COPY requirements.txt .
+COPY requirements/main.txt .
 
 # Install dependencies
 RUN --mount=type=cache,target=/root/.cache/pip \

@@ -4,6 +4,4 @@ python-dotenv
 PyYAML
 rich
 requests
-pytest
-pytest-cov
-pytest-mock
+uv

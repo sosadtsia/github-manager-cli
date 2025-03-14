@@ -13,14 +13,15 @@ setup(
         ],
     },
     install_requires=[
-        'pylint',
         'PyGithub',
         'python-dotenv',
         'PyYAML',
         'rich',
-        'requests',
-        'pytest',
-        'pytest-cov',
-        'pytest-mock',
+        'requests'
     ],
+    author="Sviatoslav Osadtsia",
+    author_email="sviatoslav.osadtsia@gmail.com",
+    description="A tool to manage GitHub repositories",
+    license="GPL-3.0 license",
+    url="https://github.com/SLAVNG/github-manager"
 )

@@ -1,6 +1,9 @@
 ##
 # repositories.yaml
 # A map of repositories with the parameters.
+#
+# The extended list of parameters can be found at:
+# https://pygithub.readthedocs.io/en/stable/github_objects/Repository.html
 ##
 ---
 repositories:
