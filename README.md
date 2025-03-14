@@ -1,25 +1,34 @@
 # GitHub Manager
 
+[![PyPI](https://img.shields.io/pypi/v/github-manager.svg)](https://pypi.python.org/pypi/github-manager)
+![CI](https://github.com/PyGithub/SLAVNG/github-manager/workflows/CI/badge.svg)
+[![readthedocs](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](https://pygithub.readthedocs.io/en/stable/?badge=stable)
+[![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 ## Overview
-GitHub Manager is a Python application designed to help users manage their GitHub repositories, issues, and pull requests efficiently. It provides functionalities for handling labels and other repository-related tasks.
+GitHub Manager is a Python application designed to help users manage their GitHub repositories via YAML file definition.
 
 ## Features
-- Manage labels for GitHub repositories
-- Core functionalities for managing repositories, issues, and pull requests
-- Utility functions for common tasks
+- Create or delete repositories
+- Update repositories based on updated YAML config
 - Notifications via Slack and Discord
 
 ## Installation
 To install the required dependencies, run the following command:
 
 ```sh
-pip install -r requirements.txt
+pip install -r requirements/main.txt
 ```
 
 To install the `gm` CLI tool, run the following command:
 
 ```sh
 pip install -e .
+```
+or
+```sh
+uv pip install -e .
 ```
 
 ## Configuration
@@ -33,35 +42,31 @@ SLACK_WEBHOOK_URL=your_slack_webhook
 ```
 
 ## Usage
-To use the GitHub Manager, you can run the `gm` command. Make sure to configure your label settings in the `config/labeler.yaml` file.
+To use the GitHub Manager, you can run the `gm` command.
 
 ```sh
-gm create --repo my-repo --description "My new repository"
-gm delete --repo my-repo
-gm issues --repo my-repo
-gm labels --repo my-repo
-gm pulls --repo my-repo
-gm config --config path/to/config.yaml
-gm decom --config path/to/config.yaml
-gm new-issue --repo my-repo --title "Issue title" --body "Issue body" --labels "bug,enhancement"
+gm create --config repositories.yaml
+gm delete --config delete_repositories.yaml
 ```
 
-## Sponsors
-
-Please [contact me](https://github.com/sosadtsia) if you want to become a sponsor.
+## Vision
+For more details on the vision and goals of this project, please refer to the [VISION.md](VISION.md) file.
 
 ## Contributions
 
-I always want to get feedback and update this project as the community matures and new ideas are implemented and verified over time.
+Long-term discussion and bug reports are maintained via GitHub Issues.
+Code review is done via GitHub Pull Requests.
 
-If you are interested in specific topics, please [open an issue](https://github.com/sosadtsia/github-manager.git/issues), or thumb up an issue you want to be covered. If you want to contribute, please submit a pull request.
+For more information read [CONTRIBUTING.md].
 
-## License
-
-This project is licensed with [apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[CONTRIBUTING.md]: https://github.com/SLAVNG/github-manager/blob/main/CONTRIBUTING.md
 
 ## Code of Conduct
 
 We are committed to fostering a welcoming and inclusive environment. Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our expectations for respectful participation.
 
 By contributing to this project, you agree to abide by its terms.
+
+## Sponsors
+
+Please [contact me](https://github.com/sosadtsia) if you want to become a sponsor.
