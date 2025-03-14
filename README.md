@@ -1,7 +1,7 @@
 # GitHub Repository Manager
 
-[![PyPI](https://img.shields.io/pypi/v/github-repository-manager.svg)](https://pypi.python.org/pypi/github-repository-manager)
-![CI](https://github.com/SLAVNG/github-manager/workflows/CI/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/gh-repository-manager.svg)](https://pypi.python.org/pypi/github-repository-manager)
+![CI](https://github.com/SLAVNG/gh-reopsitory-manager/workflows/CI/badge.svg)
 [![readthedocs](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](https://pygithub.readthedocs.io/en/stable/?badge=stable)
 [![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
