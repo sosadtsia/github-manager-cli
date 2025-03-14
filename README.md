@@ -1,13 +1,13 @@
-# GitHub Manager
+# GitHub Repository Manager
 
-[![PyPI](https://img.shields.io/pypi/v/github-manager.svg)](https://pypi.python.org/pypi/github-manager)
-![CI](https://github.com/PyGithub/SLAVNG/github-manager/workflows/CI/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/github-repository-manager.svg)](https://pypi.python.org/pypi/github-repository-manager)
+![CI](https://github.com/SLAVNG/github-manager/workflows/CI/badge.svg)
 [![readthedocs](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](https://pygithub.readthedocs.io/en/stable/?badge=stable)
 [![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Overview
-GitHub Manager is a Python application designed to help users manage their GitHub repositories via YAML file definition.
+GitHub Repository Manager is a Python application designed to help users manage their GitHub repositories via YAML file definition.
 
 ## Features
 - Create or delete repositories
@@ -21,7 +21,7 @@ To install the required dependencies, run the following command:
 pip install -r requirements/main.txt
 ```
 
-To install the `gm` CLI tool, run the following command:
+To install the `grm` CLI tool, run the following command:
 
 ```sh
 pip install -e .
@@ -42,11 +42,11 @@ SLACK_WEBHOOK_URL=your_slack_webhook
 ```
 
 ## Usage
-To use the GitHub Manager, you can run the `gm` command.
+To use the GitHub Repository Manager, you can run the `grm` command.
 
 ```sh
-gm create --config repositories.yaml
-gm delete --config delete_repositories.yaml
+grm create --config repositories.yaml
+grm delete --config delete_repositories.yaml
 ```
 
 ## Vision
