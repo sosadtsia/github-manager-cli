@@ -1,13 +1,13 @@
-# GitHub Repository Manager
+# GitHub Manager CLI (ghrm)
 
-[![PyPI](https://img.shields.io/pypi/v/gh-repository-manager.svg)](https://pypi.python.org/pypi/github-repository-manager)
-![CI](https://github.com/SLAVNG/gh-reopsitory-manager/workflows/CI/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/github-manager-cli.svg)](https://pypi.python.org/pypi/github-manager-cli)
+![CI](https://github.com/SLAVNG/github-manager-cli/workflows/CI/badge.svg)
 [![readthedocs](https://img.shields.io/badge/docs-stable-brightgreen.svg?style=flat)](https://pygithub.readthedocs.io/en/stable/?badge=stable)
 [![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Overview
-GitHub Repository Manager is a Python application designed to help users manage their GitHub repositories via YAML file definition.
+GitHub Manager CLI is a Python application designed to help users manage their GitHub repositories via YAML file definition.
 
 ## Features
 - Create or delete repositories
@@ -21,13 +21,11 @@ To install the required dependencies, run the following command:
 pip install -r requirements/main.txt
 ```
 
-To install the `grm` CLI tool, run the following command:
+To install the `ghrm` CLI tool, run the following command:
 
 ```sh
-pip install -e .
-```
-or
-```sh
+pip install uv
+uv build
 uv pip install -e .
 ```
 
@@ -45,8 +43,8 @@ SLACK_WEBHOOK_URL=your_slack_webhook
 To use the GitHub Repository Manager, you can run the `grm` command.
 
 ```sh
-grm create --config repositories.yaml
-grm delete --config delete_repositories.yaml
+ghrm create --config repositories.yaml
+ghrm delete --config delete_repositories.yaml
 ```
 
 ## Vision
@@ -59,7 +57,7 @@ Code review is done via GitHub Pull Requests.
 
 For more information read [CONTRIBUTING.md].
 
-[CONTRIBUTING.md]: https://github.com/SLAVNG/github-manager/blob/main/CONTRIBUTING.md
+[CONTRIBUTING.md]: https://github.com/SLAVNG/github-manager-cli/blob/main/CONTRIBUTING.md
 
 ## Code of Conduct
 

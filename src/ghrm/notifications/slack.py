@@ -1,7 +1,5 @@
 # slack.py - Sends notifications to Slack channels
 
-# notifications.py - Sends notifications to the specified communication platform
-
 import os
 import requests
 from rich.console import Console
