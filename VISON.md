@@ -25,6 +25,8 @@ Our vision is to create a robust and user-friendly tool that empowers developers
 - **Error Handling**: Provide clear and informative error messages to help users troubleshoot issues.
 
 ## Future Enhancements
+
+- **DRY-RUN Mode**: Implement DRY-RUN mode on deletion of the repositories as default. To delete implemnet NO-DRY-RUN mode parameter.
 - **Integration with CI/CD**: Integrate with continuous integration and continuous deployment (CI/CD) pipelines to automate repository management as part of the development workflow.
 
 ## Conclusion

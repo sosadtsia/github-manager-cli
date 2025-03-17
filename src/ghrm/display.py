@@ -1,3 +1,5 @@
+# display.py - Display module for GitHub Manager CLI
+
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table

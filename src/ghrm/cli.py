@@ -1,22 +1,24 @@
+# cli.py - Command Line Interface module for GitHub Manager CLI
+
 import argparse
 import os
 import yaml
 from rich.text import Text
 from dotenv import load_dotenv
 from github import Github, GithubException, Auth
-from repository import (
+from .repository import (
     create_repository,
     delete_repository
 )
 
-from display import (
+from .display import (
     display_result,
     display_list,
     display_empty
 )
 
-from notifications.slack import send_slack_notification
-from notifications.discord import send_discord_notification
+from .notifications.slack import send_slack_notification
+from .notifications.discord import send_discord_notification
 
 # Load environment variables from .env file
 load_dotenv()

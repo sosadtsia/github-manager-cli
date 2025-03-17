@@ -1,3 +1,5 @@
+# repository.py - Repository module for GitHub Manager CLI
+
 import os
 import yaml
 from dotenv import load_dotenv
