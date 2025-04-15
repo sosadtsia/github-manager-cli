@@ -67,16 +67,3 @@ Then you can run the tests through `pytest`.
 Run a specific test with `pytest tests/tests_filename.py` or `pytest tests/`.
 
 If you add a new test, for example `Issue139.testCompletion`, you have to run `pytest -k Issue139.testCompletion --record` to create the `tests/ReplayData/*.txt` files needed for your new test.
-
-## Build documentation locally
-
-```bash
-pip install -r requirements/docs.txt
-sphinx-build doc build
-```
-
-If you use tox:
-
-```bash
-tox -edocs
-```
